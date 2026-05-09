@@ -122,18 +122,16 @@ export default function ManageScreen() {
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.white} />
 
-      {filtered.length != 0 && (
-        <View style={styles.searchWrapper}>
-          <Search size={18} color={Colors.textLight} />
-          <TextInput
-            style={styles.search}
-            placeholder="Search products..."
-            placeholderTextColor={Colors.textLight}
-            value={search}
-            onChangeText={setSearch}
-          />
-        </View>
-      )}
+      <View style={styles.searchWrapper}>
+        <Search size={18} color={Colors.textLight} />
+        <TextInput
+          style={styles.search}
+          placeholder="Search products..."
+          placeholderTextColor={Colors.textLight}
+          value={search}
+          onChangeText={setSearch}
+        />
+      </View>
 
       <FlatList
         data={filtered}
