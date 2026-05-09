@@ -26,7 +26,7 @@ export default function SummaryScreen() {
       loadProducts();
     }, []),
   );
-  //
+
   const totalRevenue = products.reduce(
     (sum, p) => sum + p.price * p.totalSold,
     0,

@@ -39,7 +39,7 @@ export default function ManageScreen() {
     const data = await getProducts();
     setProducts(data);
   };
-  //
+
   useFocusEffect(
     useCallback(() => {
       loadProducts();
