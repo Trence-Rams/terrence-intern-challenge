@@ -21,7 +21,7 @@ export default function ProductCard({ product, onSell, onUndo }: Props) {
   const handleLongPress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     onUndo(product.id);
-  };
+  }; //
 
   return (
     <TouchableOpacity
