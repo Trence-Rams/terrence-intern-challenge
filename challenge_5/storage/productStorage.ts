@@ -19,7 +19,7 @@ export const getProducts = async (): Promise<Product[]> => {
     const products = JSON.parse(data);
     return products.map((p: any) => ({
       ...p,
-      dailySold: p.dailySold ?? 0,
+      dailySold: p.dailySold ?? [],
     }));
   } catch {
     return [];
