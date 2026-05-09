@@ -10,33 +10,27 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors, FontSize, Spacing } from "../constants/theme";
-import { getProducts, resetDay } from "../storage/productStorage";
+import { getGrandTotal, resetDay } from "../storage/productStorage";
 
 export default function SummaryScreen() {
-  const [products, setProducts] = React.useState<any[]>([]);
+  const [grandTotal, setGrandTotal] = React.useState({
+    revenue: 0,
+    sold: 0,
+    dailyRevenue: 0,
+    dailySold: 0,
+  });
   const insets = useSafeAreaInsets();
 
-  const loadProducts = async () => {
-    const data = await getProducts();
-    setProducts(data);
+  const loadTotals = async () => {
+    const totals = await getGrandTotal();
+    setGrandTotal(totals);
   };
 
   useFocusEffect(
     useCallback(() => {
-      loadProducts();
+      loadTotals();
     }, []),
   );
-  //
-  const totalRevenue = products.reduce(
-    (sum, p) => sum + p.price * p.totalSold,
-    0,
-  );
-  const totalSold = products.reduce((sum, p) => sum + p.totalSold, 0);
-  const dailyRevenue = products.reduce(
-    (sum, p) => sum + p.price * p.dailySold,
-    0,
-  );
-  const dailySold = products.reduce((sum, p) => sum + p.dailySold, 0);
 
   const handleResetDay = () => {
     Alert.alert(
@@ -49,7 +43,7 @@ export default function SummaryScreen() {
           style: "destructive",
           onPress: async () => {
             await resetDay();
-            await loadProducts();
+            await loadTotals();
           },
         },
       ],
@@ -63,11 +57,13 @@ export default function SummaryScreen() {
       <Text style={styles.sectionTitle}>Today</Text>
       <View style={styles.statsRow}>
         <View style={styles.statCard}>
-          <Text style={styles.statValue}>R{dailyRevenue.toFixed(2)}</Text>
+          <Text style={styles.statValue}>
+            R{grandTotal.dailyRevenue.toFixed(2)}
+          </Text>
           <Text style={styles.statLabel}>Today's Sales</Text>
         </View>
         <View style={styles.statCard}>
-          <Text style={styles.statValue}>{dailySold}</Text>
+          <Text style={styles.statValue}>{grandTotal.dailySold}</Text>
           <Text style={styles.statLabel}>Items Today</Text>
         </View>
       </View>
@@ -75,11 +71,11 @@ export default function SummaryScreen() {
       <Text style={styles.sectionTitle}>All Time</Text>
       <View style={styles.statsRow}>
         <View style={[styles.statCard, styles.statCardDim]}>
-          <Text style={styles.statValue}>R{totalRevenue.toFixed(2)}</Text>
+          <Text style={styles.statValue}>R{grandTotal.revenue.toFixed(2)}</Text>
           <Text style={styles.statLabel}>Total Sales</Text>
         </View>
         <View style={[styles.statCard, styles.statCardDim]}>
-          <Text style={styles.statValue}>{totalSold}</Text>
+          <Text style={styles.statValue}>{grandTotal.sold}</Text>
           <Text style={styles.statLabel}>Items Sold</Text>
         </View>
       </View>
