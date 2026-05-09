@@ -69,7 +69,7 @@ export default function SellScreen() {
       </View>
     );
   }
-  //
+
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.white} />
