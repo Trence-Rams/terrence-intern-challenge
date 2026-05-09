@@ -12,7 +12,7 @@ interface Props {
 
 export default function ProductCard({ product, onSell, onUndo }: Props) {
   const isLowStock = product.stock <= product.lowStockThreshold;
-  //update the
+
   const handlePress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onSell(product.id);
