@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors, FontSize, Spacing } from "../constants/theme";
-import { getGrandTotal, resetDay } from "../storage/productStorage";
+import { getGrandTotal, resetAll, resetDay } from "../storage/productStorage";
 
 export default function SummaryScreen() {
   const [grandTotal, setGrandTotal] = React.useState({
@@ -32,22 +32,25 @@ export default function SummaryScreen() {
     }, []),
   );
 
-  const handleResetDay = () => {
-    Alert.alert(
-      "Reset Day",
-      "This will clear today's sales. All time totals will stay. Are you sure?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Reset",
-          style: "destructive",
-          onPress: async () => {
-            await resetDay();
-            await loadTotals();
-          },
+  const handleReset = () => {
+    Alert.alert("Reset", "What would you like to reset?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Reset Today",
+        onPress: async () => {
+          await resetDay();
+          await loadTotals();
         },
-      ],
-    );
+      },
+      {
+        text: "Reset All Time",
+        style: "destructive",
+        onPress: async () => {
+          await resetAll();
+          await loadTotals();
+        },
+      },
+    ]);
   };
 
   return (
@@ -80,8 +83,8 @@ export default function SummaryScreen() {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.resetBtn} onPress={handleResetDay}>
-        <Text style={styles.resetBtnText}>Reset Day</Text>
+      <TouchableOpacity style={styles.resetBtn} onPress={handleReset}>
+        <Text style={styles.resetBtnText}>Reset</Text>
       </TouchableOpacity>
     </View>
   );

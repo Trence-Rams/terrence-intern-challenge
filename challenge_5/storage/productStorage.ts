@@ -154,3 +154,17 @@ export const resetDay = async (): Promise<void> => {
     JSON.stringify({ revenue: 0, sold: 0 }),
   );
 };
+
+export const resetAll = async (): Promise<void> => {
+  const products = await getProducts();
+  const reset = products.map((p) => ({ ...p, dailySold: 0, totalSold: 0 }));
+  await saveProducts(reset);
+  await AsyncStorage.setItem(
+    GRAND_TOTAL_KEY,
+    JSON.stringify({ revenue: 0, sold: 0 }),
+  );
+  await AsyncStorage.setItem(
+    GRAND_DAILY_KEY,
+    JSON.stringify({ revenue: 0, sold: 0 }),
+  );
+};
