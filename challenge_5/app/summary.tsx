@@ -16,8 +16,10 @@ export default function SummaryScreen() {
   const [grandTotal, setGrandTotal] = React.useState({
     revenue: 0,
     sold: 0,
+    profit: 0,
     dailyRevenue: 0,
     dailySold: 0,
+    dailyProfit: 0,
   });
   const insets = useSafeAreaInsets();
 
@@ -67,7 +69,15 @@ export default function SummaryScreen() {
         </View>
         <View style={styles.statCard}>
           <Text style={styles.statValue}>{grandTotal.dailySold}</Text>
-          <Text style={styles.statLabel}>Items Today</Text>
+          <Text style={styles.statLabel}>Items Sold</Text>
+        </View>
+      </View>
+      <View style={styles.statsRow}>
+        <View style={[styles.statCard, styles.statCardProfit]}>
+          <Text style={styles.statValue}>
+            R{grandTotal.dailyProfit.toFixed(2)}
+          </Text>
+          <Text style={styles.statLabel}>Today's Profit</Text>
         </View>
       </View>
 
@@ -79,7 +89,19 @@ export default function SummaryScreen() {
         </View>
         <View style={[styles.statCard, styles.statCardDim]}>
           <Text style={styles.statValue}>{grandTotal.sold}</Text>
-          <Text style={styles.statLabel}>Items Sold</Text>
+          <Text style={styles.statLabel}>Total Items</Text>
+        </View>
+      </View>
+      <View style={styles.statsRow}>
+        <View
+          style={[
+            styles.statCard,
+            styles.statCardDim,
+            styles.statCardProfitDim,
+          ]}
+        >
+          <Text style={styles.statValue}>R{grandTotal.profit.toFixed(2)}</Text>
+          <Text style={styles.statLabel}>Total Profit</Text>
         </View>
       </View>
 
@@ -107,6 +129,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: Spacing.md,
     gap: Spacing.md,
+    marginBottom: Spacing.sm,
   },
   statCard: {
     flex: 1,
@@ -118,6 +141,12 @@ const styles = StyleSheet.create({
   },
   statCardDim: {
     backgroundColor: Colors.border,
+  },
+  statCardProfit: {
+    backgroundColor: "#4CAF50",
+  },
+  statCardProfitDim: {
+    backgroundColor: "#81C784",
   },
   statValue: {
     fontSize: FontSize.xxl,
