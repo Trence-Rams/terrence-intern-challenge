@@ -32,6 +32,7 @@ export default function ManageScreen() {
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [cost, setCost] = useState("");
   const [stock, setStock] = useState("");
   const [threshold, setThreshold] = useState("5");
 
@@ -49,6 +50,7 @@ export default function ManageScreen() {
   const resetForm = () => {
     setName("");
     setPrice("");
+    setCost("");
     setStock("");
     setThreshold("5");
     setEditingProduct(null);
@@ -63,13 +65,14 @@ export default function ManageScreen() {
     setEditingProduct(product);
     setName(product.name);
     setPrice(product.price.toString());
+    setCost(product.cost.toString());
     setStock(product.stock.toString());
     setThreshold(product.lowStockThreshold.toString());
     setModalVisible(true);
   };
 
   const handleSave = async () => {
-    if (!name || !price || !stock) {
+    if (!name || !price || !cost || !stock) {
       Alert.alert("Missing fields", "Please fill in all fields");
       return;
     }
@@ -79,6 +82,7 @@ export default function ManageScreen() {
         ...editingProduct,
         name,
         price: parseFloat(price),
+        cost: parseFloat(cost),
         stock: parseInt(stock),
         lowStockThreshold: parseInt(threshold),
       });
@@ -86,6 +90,7 @@ export default function ManageScreen() {
       await addProduct({
         name,
         price: parseFloat(price),
+        cost: parseFloat(cost),
         stock: parseInt(stock),
         lowStockThreshold: parseInt(threshold),
       });
@@ -141,8 +146,10 @@ export default function ManageScreen() {
             <View style={styles.info}>
               <Text style={styles.productName}>{item.name}</Text>
               <Text style={styles.productDetail}>
-                R{item.price.toFixed(2)} · Stock: {item.stock} · Low at:{" "}
-                {item.lowStockThreshold}
+                Price: R{item.price.toFixed(2)} · Cost: R{item.cost.toFixed(2)}
+              </Text>
+              <Text style={styles.productDetail}>
+                Stock: {item.stock} · Low at: {item.lowStockThreshold}
               </Text>
             </View>
             <View style={styles.actions}>
@@ -201,12 +208,22 @@ export default function ManageScreen() {
                 placeholderTextColor={Colors.textLight}
               />
 
-              <Text style={styles.label}>Price (R)</Text>
+              <Text style={styles.label}>Selling Price (R)</Text>
               <TextInput
                 style={styles.input}
                 value={price}
                 onChangeText={setPrice}
                 placeholder="e.g. 14.99"
+                placeholderTextColor={Colors.textLight}
+                keyboardType="decimal-pad"
+              />
+
+              <Text style={styles.label}>Cost Price (R)</Text>
+              <TextInput
+                style={styles.input}
+                value={cost}
+                onChangeText={setCost}
+                placeholder="e.g. 12.00"
                 placeholderTextColor={Colors.textLight}
                 keyboardType="decimal-pad"
               />
@@ -320,7 +337,6 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     borderRadius: 8,
   },
-
   editBtnText: {
     color: Colors.white,
     fontWeight: "600",
