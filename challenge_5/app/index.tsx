@@ -1,6 +1,7 @@
 import { useFocusEffect } from "expo-router";
 import { Search, ShoppingCart, X } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
+import * as Haptics from "expo-haptics";
 import {
   FlatList,
   Modal,
@@ -145,13 +146,20 @@ export default function SellScreen() {
           </Text>
         </View>
 
-        {/* Cart Button */}
         <TouchableOpacity
           style={styles.cartBtn}
           onPress={() => {
             setAmountGiven("");
             setCartModal(true);
           }}
+          onLongPress={() => {
+            if (cart.length > 0) {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+              setCart([]);
+              setAmountGiven("");
+            }
+          }}
+          delayLongPress={500}
         >
           <ShoppingCart size={22} color={Colors.text} />
           {cartTotal > 0 && (
@@ -160,7 +168,6 @@ export default function SellScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Search */}
       <View style={styles.searchWrapper}>
         <Search size={18} color={Colors.textLight} />
         <TextInput
