@@ -1,5 +1,5 @@
 import { useFocusEffect } from "expo-router";
-import { Search, ShoppingCart } from "lucide-react-native";
+import { Search, ShoppingCart, X } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import {
   FlatList,
@@ -76,6 +76,9 @@ export default function SellScreen() {
   };
 
   const handleUndo = async (id: string) => {
+    const cartItem = cart.find((item) => item.id === id);
+    if (!cartItem) return; // Not in cart, do nothing
+
     await undoSell(id);
     await loadProducts();
     setCart((prev) => {
@@ -205,7 +208,12 @@ export default function SellScreen() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Current Sale</Text>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Current Sale</Text>
+              <TouchableOpacity onPress={() => setCartModal(false)}>
+                <X size={24} color={Colors.text} />
+              </TouchableOpacity>
+            </View>
 
             {cart.length === 0 ? (
               <Text style={styles.emptyCartText}>No items added yet</Text>
@@ -287,6 +295,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.md,
   },
   header: {
     flexDirection: "row",
